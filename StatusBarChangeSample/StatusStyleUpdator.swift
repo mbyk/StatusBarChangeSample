@@ -22,9 +22,9 @@ class StatusStyleUpdator {
     private var _statusBarHiddenAnimationDuration: TimeInterval = 0.3
     private var _statusBarUpdateAnimationDuration: TimeInterval = 0.3
     
-    var statusBarStyle: UIStatusBarStyle = .default {
+    private var _statusBarStyle: UIStatusBarStyle = .default {
         didSet {
-            guard oldValue != statusBarStyle else { return }
+            guard oldValue != _statusBarStyle else { return }
             UIView.animate(withDuration: _statusBarStyleAnimationDuration) { [weak self] in
                 guard let strongSelf = self else { return }
                 strongSelf.delegateController?.setNeedsStatusBarAppearanceUpdate()
@@ -32,9 +32,9 @@ class StatusStyleUpdator {
         }
     }
     
-    var statusBarHidden = false {
+    private var _statusBarHidden = false {
         didSet {
-            guard oldValue != statusBarHidden else { return }
+            guard oldValue != _statusBarHidden else { return }
             UIView.animate(withDuration: _statusBarHiddenAnimationDuration) { [weak self] in
                 guard let strongSelf = self else { return }
                 strongSelf.delegateController?.setNeedsStatusBarAppearanceUpdate()
@@ -42,14 +42,26 @@ class StatusStyleUpdator {
         }
     }
     
-    var statusBarUpdateAnimation: UIStatusBarAnimation = .fade {
+    private var _statusBarUpdateAnimation: UIStatusBarAnimation = .fade {
         didSet {
-            guard oldValue != statusBarUpdateAnimation else { return }
+            guard oldValue != _statusBarUpdateAnimation else { return }
             UIView.animate(withDuration: _statusBarUpdateAnimationDuration) { [weak self] in
                 guard let strongSelf = self else { return }
                 strongSelf.delegateController?.setNeedsStatusBarAppearanceUpdate()
             }
         }
+    }
+    
+    var statusBarStyle: UIStatusBarStyle {
+        return _statusBarStyle
+    }
+    
+    var statusBarHidden: Bool {
+        return _statusBarHidden
+    }
+    
+    var statusBarUpdateAnimation: UIStatusBarAnimation {
+        return _statusBarUpdateAnimation
     }
     
     private weak var delegateController: UIViewController?
@@ -61,15 +73,15 @@ class StatusStyleUpdator {
     func updateStatusBar(statusBarStyle: UIStatusBarStyle? = nil, statusBarHidden: Bool? = nil, statusBarUpdateAnimation: UIStatusBarAnimation? = nil) {
         
         if let statusBarStyle = statusBarStyle {
-            self.statusBarStyle = statusBarStyle
+            _statusBarStyle = statusBarStyle
         }
 
         if let statusBarHidden = statusBarHidden {
-            self.statusBarHidden = statusBarHidden
+            _statusBarHidden = statusBarHidden
         }
         
         if let statusBarUpdateAnimation = statusBarUpdateAnimation {
-            self.statusBarUpdateAnimation = statusBarUpdateAnimation
+            _statusBarUpdateAnimation = statusBarUpdateAnimation
         }
     }
     
